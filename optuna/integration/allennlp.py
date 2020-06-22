@@ -105,7 +105,8 @@ class AllenNLPExecutor(object):
         # https://github.com/allenai/allentune/blob/master/allentune/modules/allennlp_runner.py#L34-L65
         for key, value in self._params.items():
             self._params[key] = str(value)
-        _params = json.loads(_jsonnet.evaluate_file(self._config_file, ext_vars=self._params))
+        ext_vars = {**allennlp.common.params._environment_variables(), **self._params}
+        _params = json.loads(_jsonnet.evaluate_file(self._config_file, ext_vars=ext_vars))
 
         # _params contains a list of string or string as value values.
         # Some params couldn't be casted correctly and
